@@ -3,7 +3,7 @@
         // AMD. Register as an anonymous module.
         define([
             'request-as-request/browser',
-            'ascii-art/art-source',
+            'ascii-art/artwork',
             'async/mapSeries',
             'cheerio',
             'minisearch',
@@ -12,7 +12,7 @@
     }else if (typeof module === 'object' && module.exports){
         module.exports = factory(
             require('request-as-request'),
-            require('ascii-art/art-source'),
+            require('ascii-art/artwork'),
             require('async/mapSeries'),
             require('cheerio'),
             require('minisearch'),
