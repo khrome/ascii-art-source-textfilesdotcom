@@ -2,8 +2,6 @@ var should = require('chai').should();
 
 var db = require('better-sqlite3')(':memory:');
 
-//const row = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
-
 
 var source = require('./source');
 
@@ -63,7 +61,7 @@ describe('textfiles.com', function(){
     });
 
     describe('can fetch', function(){
-        it('searches', function(done){
+        it('fetches', function(done){
             source.fetch('FAIRLIGHT', 'elitetrn.nfo', function(err, results){
                 should.not.exist(err);
                 should.exist(results);

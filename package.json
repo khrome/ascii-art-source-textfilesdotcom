@@ -1,6 +1,7 @@
 {
   "name": "ascii-art-source-textfilesdotcom",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "main": "source.js",
   "devDependencies": {
     "better-sqlite3": "^7.1.4",
     "chai": "^4.3.4",
