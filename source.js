@@ -2,7 +2,6 @@
     if(typeof define === 'function' && define.amd){
         // AMD. Register as an anonymous module.
         define([
-            'request-as-request/browser',
             'ascii-art/art-source',
             'async/mapSeries',
             'cheerio',
@@ -11,7 +10,6 @@
         ], factory);
     }else if (typeof module === 'object' && module.exports){
         module.exports = factory(
-            require('request-as-request'),
             require('ascii-art/art-source'),
             require('async/mapSeries'),
             require('cheerio'),
@@ -21,7 +19,6 @@
     }else{
         // Browser globals (root is window)
         root.AsciiArtSourceTextFilesDotCom = factory(
-            root.request,
             root.AsciiArtSource,
             root.async.mapSeries,
             root.cheerio,
@@ -29,7 +26,10 @@
             root.uuid
         );
     }
-}(this, function(request, ArtSource, map, cheerio, MiniSearch, uuid){
+}(this, function(ArtSource, map, cheerio, MiniSearch, uuid){
+    var request = function(){
+        throw new Error('request not set!');
+    }
     var contexts = {
         NFO : {post:'piracy/'},
         asciiart : {pre: 'artscene.'},
@@ -116,6 +116,9 @@
                     cb(undefined, results);
                 }, 0);
             });
+        },
+        useRequest : function(instance){
+            request = instance;
         },
         list : function(callback){
             var segmentedList = {};

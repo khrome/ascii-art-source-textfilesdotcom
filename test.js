@@ -5,6 +5,8 @@ var db = require('better-sqlite3')(':memory:');
 
 var source = require('./source');
 
+source.useRequest(require('request-as-request'));
+
 db.exec("CREATE TABLE textfilesKVS (key TEXT, value TEXT)");
 describe('textfiles.com', function(){
     describe('can list', function(){
