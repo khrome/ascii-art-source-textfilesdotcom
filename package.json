@@ -1,6 +1,6 @@
 {
   "name": "ascii-art-source-textfilesdotcom",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "source.js",
   "devDependencies": {
     "better-sqlite3": "^7.1.4",
@@ -13,6 +13,7 @@
     "ascii-art": "^2.8.2",
     "async": "^3.2.0",
     "cheerio": "^1.0.0-rc.5",
-    "minisearch": "^3.0.2"
+    "minisearch": "^3.0.2",
+    "uuid": "^8.3.2"
   }
 }
