@@ -70,19 +70,19 @@
                         res.request.responseContent &&
                         res.request.responseContent.body
                     ) || undefined;
-                callback(undefined, data);
+                callback(undefined, res, data);
             });
         }
         if(source.cache){
             source.cache.get(url, function(err, val){
                 if(val) return cb(undefined, JSON.parse(val));
-                directFetch(url, function(err, body){
+                directFetch(url, function(err, res, body){
                     if(err) return cb(err);
                     try{
                         var data = handler(body);
                         var dataString = JSON.stringify(data);
                         source.cache.set(url, dataString, function(err){
-                            cb(undefined, data);
+                            cb(undefined, {}, data);
                         });
                     }catch(ex){ cb(ex); }
                 });
@@ -91,10 +91,14 @@
             directFetch(url, function(err, res, body){
                 try{
                     var data = handler(body);
-                    source.cache.set(url, JSON.stringify(data), function(err){
-                        cb(undefined, data);
-                    });
-                }catch(ex){ cb(ex); }
+                    if(source.cache){
+                        source.cache.set(url, JSON.stringify(data), function(err){
+                            cb(undefined, {}, data);
+                        });
+                    }else{
+                        cb(undefined, {}, data);
+                    }
+                }catch(ex){ console.log('ERR', ex); cb(ex); }
             });
         }
     }
@@ -126,25 +130,26 @@
             return map(Object.keys(contexts), function(pathName, done){
                 var url = urlFor(pathName);
                 cachedRemote.fetch(source, url, function(body){
-                    //if(err) return callback(err);
                     var $ = cheerio.load(body);
-                    var results = $('tr').toArray().map(function(node, index){
+                    var rows = $('tr').toArray();
+                    var results = rows.map(function(node, index){
                         var file = $('a[href]', node).text();
-                        return {
+                        var dt = {
                             file : file,
-                            description : $($('td', node).toArray()[2]).text(),
+                            description : $($('td', node).toArray()[2]).text().trim(),
                             path : pathName,
                             url : urlFor(pathName, file)
-                        }
+                        };
+                        return dt;
                     }).filter(function(item){
-                        return item.name === '' || !item.name;
+                        return !(item.file === '' || !item.file);
                     });
                     return results;
-                }, function(err, results){
+                }, function(err, responses, results){
                     segmentedList[pathName] = results;
                     list = list.concat(results);
                     setTimeout(function(){
-                        done(undefined, results);
+                        done();
                     }, 200);
                 });
             }, function(err, allResults){
